@@ -1,18 +1,22 @@
-from telegram import Update
-from telegram.ext import Application, CommandHandler, ContextTypes
-import os
+import telebot
+import time
 
-TOKEN = os.getenv("BOT_TOKEN")
+BOT_TOKEN = "8577339895:AAHfRns-_MpRO35XJGnOcTgYKN9RrFVpvbw"
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Bot aktif 24 jam 🚀")
+bot = telebot.TeleBot(BOT_TOKEN)
 
-app = Application.builder().token(TOKEN).build()
+@bot.message_handler(commands=['start'])
+def start(message):
+    bot.reply_to(message, "🤖 Bot AirdropInfo aktif 24 jam!")
 
-app.add_handler(CommandHandler("start", start))
+@bot.message_handler(commands=['airdrop'])
+def airdrop(message):
+    bot.reply_to(message, "🔥 Info airdrop akan update otomatis")
 
-app.run_webhook(
-    listen="0.0.0.0",
-    port=int(os.getenv("PORT", 8080)),
-    webhook_url=os.getenv("WEBHOOK_URL")
-)
+print("Bot running...")
+while True:
+    try:
+        bot.polling(none_stop=True)
+    except Exception as e:
+        print(e)
+        time.sleep(5)
